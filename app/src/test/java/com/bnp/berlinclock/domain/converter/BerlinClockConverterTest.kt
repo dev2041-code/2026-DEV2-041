@@ -70,4 +70,48 @@ class BerlinClockConverterTest {
         assertEquals(expected, converter.convertOneHourRow(9))
         assertEquals(expected, converter.convertOneHourRow(19))
     }
+
+    // FIVE MINUTE ROW
+    @Test
+    fun `should return all OFF for 0-4 minutes`() {
+        val expected = List(11) { LampState.OFF }
+        assertEquals(expected, converter.convertFiveMinuteRow(0))
+        assertEquals(expected, converter.convertFiveMinuteRow(4))
+    }
+
+    @Test
+    fun `should return 3 lamps for 17 minutes with quarter marker`() {
+        val result = converter.convertFiveMinuteRow(17)
+        assertEquals(11, result.size)
+        assertEquals(LampState.YELLOW, result[0])
+        assertEquals(LampState.YELLOW, result[1])
+        assertEquals(LampState.RED, result[2]) // Quarter marker at position 3
+        assertEquals(LampState.OFF, result[3])
+    }
+
+    @Test
+    fun `should have RED at quarter positions for 32 minutes`() {
+        val result = converter.convertFiveMinuteRow(32)
+        assertEquals(LampState.RED, result[2]) // Position 3
+        assertEquals(LampState.RED, result[5]) // Position 6
+    }
+
+    @Test
+    fun `should return correct pattern for 59 minutes`() {
+        val expected =
+            listOf(
+                LampState.YELLOW,
+                LampState.YELLOW,
+                LampState.RED, // Position 3
+                LampState.YELLOW,
+                LampState.YELLOW,
+                LampState.RED, // Position 6
+                LampState.YELLOW,
+                LampState.YELLOW,
+                LampState.RED, // Position 9
+                LampState.YELLOW,
+                LampState.YELLOW,
+            )
+        assertEquals(expected, converter.convertFiveMinuteRow(59))
+    }
 }
