@@ -29,4 +29,19 @@ class BerlinClockConverter {
             if (index < lampsOn) LampState.RED else LampState.OFF
         }
     }
+
+    /**
+     * Converts hours to one-hour lamp row.
+     *
+     * Each lamp represents 1 hour (remainder after five-hour blocks).
+     *
+     * @param hours The hours value (0-23)
+     * @return List of 4 lamp states (RED for on, OFF for off)
+     */
+    fun convertOneHourRow(hours: Int): List<LampState> {
+        val lampsOn = hours % 5
+        return List(4) { index ->
+            if (index < lampsOn) LampState.RED else LampState.OFF
+        }
+    }
 }
