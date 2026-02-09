@@ -72,4 +72,19 @@ class BerlinClockConverter {
      * @return true if position 3, 6, or 9 (indices 2, 5, 8)
      */
     private fun isQuarterPosition(index: Int): Boolean = (index + 1) % 3 == 0
+
+    /**
+     * Converts minutes to one-minute lamp row.
+     *
+     * Each lamp represents 1 minute (remainder after five-minute blocks).
+     *
+     * @param minutes The minutes value (0-59)
+     * @return List of 4 lamp states (YELLOW for on, OFF for off)
+     */
+    fun convertOneMinuteRow(minutes: Int): List<LampState> {
+        val lampsOn = minutes % 5
+        return List(4) { index ->
+            if (index < lampsOn) LampState.YELLOW else LampState.OFF
+        }
+    }
 }
