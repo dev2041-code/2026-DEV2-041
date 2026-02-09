@@ -137,4 +137,80 @@ class BerlinClockConverterTest {
         assertEquals(expected, converter.convertOneMinuteRow(9))
         assertEquals(expected, converter.convertOneMinuteRow(59))
     }
+
+    // FULL CONVERSION
+    @Test
+    fun `should convert 00h00m00s correctly`() {
+        val berlinTime = converter.convert(0, 0, 0)
+
+        assertEquals(LampState.YELLOW, berlinTime.secondsLamp)
+        assertEquals(List(4) { LampState.OFF }, berlinTime.fiveHourRow)
+        assertEquals(List(4) { LampState.OFF }, berlinTime.oneHourRow)
+        assertEquals(List(11) { LampState.OFF }, berlinTime.fiveMinuteRow)
+        assertEquals(List(4) { LampState.OFF }, berlinTime.oneMinuteRow)
+    }
+
+    @Test
+    fun `should convert 13h17m01s correctly`() {
+        val berlinTime = converter.convert(13, 17, 1)
+
+        assertEquals(LampState.OFF, berlinTime.secondsLamp)
+        assertEquals(
+            listOf(LampState.RED, LampState.RED, LampState.OFF, LampState.OFF),
+            berlinTime.fiveHourRow,
+        )
+        assertEquals(
+            listOf(LampState.RED, LampState.RED, LampState.RED, LampState.OFF),
+            berlinTime.oneHourRow,
+        )
+        assertEquals(
+            listOf(
+                LampState.YELLOW,
+                LampState.YELLOW,
+                LampState.RED,
+                LampState.OFF,
+                LampState.OFF,
+                LampState.OFF,
+                LampState.OFF,
+                LampState.OFF,
+                LampState.OFF,
+                LampState.OFF,
+                LampState.OFF,
+            ),
+            berlinTime.fiveMinuteRow,
+        )
+        assertEquals(
+            listOf(LampState.YELLOW, LampState.YELLOW, LampState.OFF, LampState.OFF),
+            berlinTime.oneMinuteRow,
+        )
+    }
+
+    @Test
+    fun `should convert 23h59m59s correctly`() {
+        val berlinTime = converter.convert(23, 59, 59)
+
+        assertEquals(LampState.OFF, berlinTime.secondsLamp)
+        assertEquals(List(4) { LampState.RED }, berlinTime.fiveHourRow)
+        assertEquals(
+            listOf(LampState.RED, LampState.RED, LampState.RED, LampState.OFF),
+            berlinTime.oneHourRow,
+        )
+        assertEquals(
+            listOf(
+                LampState.YELLOW,
+                LampState.YELLOW,
+                LampState.RED,
+                LampState.YELLOW,
+                LampState.YELLOW,
+                LampState.RED,
+                LampState.YELLOW,
+                LampState.YELLOW,
+                LampState.RED,
+                LampState.YELLOW,
+                LampState.YELLOW,
+            ),
+            berlinTime.fiveMinuteRow,
+        )
+        assertEquals(List(4) { LampState.YELLOW }, berlinTime.oneMinuteRow)
+    }
 }
