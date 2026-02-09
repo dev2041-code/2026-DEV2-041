@@ -4,26 +4,31 @@ import java.time.LocalTime
 
 /**
  * Sealed hierarchy of all user actions for Berlin Clock.
+ *
  */
 sealed class BerlinClockAction {
-    data object IncrementHours : BerlinClockAction()
-
-    data object DecrementHours : BerlinClockAction()
-
-    data object IncrementMinutes : BerlinClockAction()
-
-    data object DecrementMinutes : BerlinClockAction()
-
-    data object IncrementSeconds : BerlinClockAction()
-
-    data object DecrementSeconds : BerlinClockAction()
-
-    data object SetCurrentTime : BerlinClockAction()
+    /**
+     * @property unit Which time unit to adjust
+     * @property delta Amount to adjust (+1 for increment, -1 for decrement)
+     */
+    data class AdjustTime(
+        val unit: TimeUnit,
+        val delta: Long,
+    ) : BerlinClockAction()
 
     /**
-     * Programmatic time update (for testing/initialization)
+     * Update time to specified value.
      *
      * @property time The new time to set
      */
     data class UpdateTime(val time: LocalTime) : BerlinClockAction()
+
+    /**
+     * Time units that can be adjusted.
+     */
+    enum class TimeUnit {
+        HOURS,
+        MINUTES,
+        SECONDS,
+    }
 }

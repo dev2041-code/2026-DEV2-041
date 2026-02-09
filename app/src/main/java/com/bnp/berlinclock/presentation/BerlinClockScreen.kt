@@ -28,8 +28,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bnp.berlinclock.R
+import com.bnp.berlinclock.domain.converter.BerlinClockConverter
 import com.bnp.berlinclock.domain.model.BerlinTime
-import com.bnp.berlinclock.domain.model.LampState
 import com.bnp.berlinclock.presentation.components.LampRow
 import com.bnp.berlinclock.presentation.components.SecondsLamp
 import com.bnp.berlinclock.presentation.theme.Background
@@ -59,6 +59,7 @@ fun BerlinClockScreen(
 
 /**
  * Content of Berlin Clock screen.
+ *
  * @param uiState Current UI state
  * @param onAction Action handler
  * @param modifier Optional modifier
@@ -112,7 +113,7 @@ private fun BerlinClockScreenContent(
 
         // Set Current Time Button
         Button(
-            onClick = { onAction(BerlinClockAction.SetCurrentTime) },
+            onClick = { onAction(BerlinClockAction.UpdateTime(LocalTime.now())) },
             colors =
                 ButtonDefaults.buttonColors(
                     containerColor = Color.White.copy(alpha = 0.1f),
@@ -126,8 +127,6 @@ private fun BerlinClockScreenContent(
 
 /**
  * Berlin Clock lamp display.
- *
- * Shows seconds lamp and all four lamp rows.
  *
  * @param berlinTime The Berlin time to display
  * @param modifier Optional modifier
@@ -199,22 +198,22 @@ private fun TimeControls(
         TimeControl(
             label = stringResource(R.string.hours_label),
             value = hours,
-            onIncrement = { onAction(BerlinClockAction.IncrementHours) },
-            onDecrement = { onAction(BerlinClockAction.DecrementHours) },
+            unit = BerlinClockAction.TimeUnit.HOURS,
+            onAction = onAction,
         )
 
         TimeControl(
             label = stringResource(R.string.minutes_label),
             value = minutes,
-            onIncrement = { onAction(BerlinClockAction.IncrementMinutes) },
-            onDecrement = { onAction(BerlinClockAction.DecrementMinutes) },
+            unit = BerlinClockAction.TimeUnit.MINUTES,
+            onAction = onAction,
         )
 
         TimeControl(
             label = stringResource(R.string.seconds_label),
             value = seconds,
-            onIncrement = { onAction(BerlinClockAction.IncrementSeconds) },
-            onDecrement = { onAction(BerlinClockAction.DecrementSeconds) },
+            unit = BerlinClockAction.TimeUnit.SECONDS,
+            onAction = onAction,
         )
     }
 }
@@ -224,16 +223,16 @@ private fun TimeControls(
  *
  * @param label Label text (HOURS, MINUTES, SECONDS)
  * @param value Current value to display
- * @param onIncrement Callback for + button
- * @param onDecrement Callback for - button
+ * @param unit Time unit for this control
+ * @param onAction Action handler
  * @param modifier Optional modifier
  */
 @Composable
 private fun TimeControl(
     label: String,
     value: Int,
-    onIncrement: () -> Unit,
-    onDecrement: () -> Unit,
+    unit: BerlinClockAction.TimeUnit,
+    onAction: (BerlinClockAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -251,7 +250,7 @@ private fun TimeControl(
 
         // + Button
         Button(
-            onClick = onIncrement,
+            onClick = { onAction(BerlinClockAction.AdjustTime(unit, 1)) },
             modifier = Modifier.size(45.dp),
             contentPadding = PaddingValues(0.dp),
             colors =
@@ -276,7 +275,7 @@ private fun TimeControl(
 
         // - Button
         Button(
-            onClick = onDecrement,
+            onClick = { onAction(BerlinClockAction.AdjustTime(unit, -1)) },
             modifier = Modifier.size(45.dp),
             contentPadding = PaddingValues(0.dp),
             colors =
@@ -299,49 +298,7 @@ private fun TimeControl(
 private fun BerlinClockScreenPreview() {
     BerlinClockTheme {
         BerlinClockScreenContent(
-            uiState =
-                BerlinClockUiState(
-                    currentTime = LocalTime.of(13, 17, 1),
-                    berlinTime =
-                        BerlinTime(
-                            secondsLamp = LampState.OFF,
-                            fiveHourRow =
-                                listOf(
-                                    LampState.RED,
-                                    LampState.RED,
-                                    LampState.OFF,
-                                    LampState.OFF,
-                                ),
-                            oneHourRow =
-                                listOf(
-                                    LampState.RED,
-                                    LampState.RED,
-                                    LampState.RED,
-                                    LampState.OFF,
-                                ),
-                            fiveMinuteRow =
-                                listOf(
-                                    LampState.YELLOW,
-                                    LampState.YELLOW,
-                                    LampState.RED,
-                                    LampState.OFF,
-                                    LampState.OFF,
-                                    LampState.OFF,
-                                    LampState.OFF,
-                                    LampState.OFF,
-                                    LampState.OFF,
-                                    LampState.OFF,
-                                    LampState.OFF,
-                                ),
-                            oneMinuteRow =
-                                listOf(
-                                    LampState.YELLOW,
-                                    LampState.YELLOW,
-                                    LampState.OFF,
-                                    LampState.OFF,
-                                ),
-                        ),
-                ),
+            uiState = createPreviewState(13, 17, 1),
             onAction = {},
         )
     }
@@ -355,18 +312,7 @@ private fun BerlinClockScreenPreview() {
 private fun BerlinClockScreenMidnightPreview() {
     BerlinClockTheme {
         BerlinClockScreenContent(
-            uiState =
-                BerlinClockUiState(
-                    currentTime = LocalTime.of(0, 0, 0),
-                    berlinTime =
-                        BerlinTime(
-                            secondsLamp = LampState.YELLOW,
-                            fiveHourRow = List(4) { LampState.OFF },
-                            oneHourRow = List(4) { LampState.OFF },
-                            fiveMinuteRow = List(11) { LampState.OFF },
-                            oneMinuteRow = List(4) { LampState.OFF },
-                        ),
-                ),
+            uiState = createPreviewState(0, 0, 0),
             onAction = {},
         )
     }
@@ -380,38 +326,28 @@ private fun BerlinClockScreenMidnightPreview() {
 private fun BerlinClockScreenMaxTimePreview() {
     BerlinClockTheme {
         BerlinClockScreenContent(
-            uiState =
-                BerlinClockUiState(
-                    currentTime = LocalTime.of(23, 59, 59),
-                    berlinTime =
-                        BerlinTime(
-                            secondsLamp = LampState.OFF,
-                            fiveHourRow = List(4) { LampState.RED },
-                            oneHourRow =
-                                listOf(
-                                    LampState.RED,
-                                    LampState.RED,
-                                    LampState.RED,
-                                    LampState.OFF,
-                                ),
-                            fiveMinuteRow =
-                                listOf(
-                                    LampState.YELLOW,
-                                    LampState.YELLOW,
-                                    LampState.RED,
-                                    LampState.YELLOW,
-                                    LampState.YELLOW,
-                                    LampState.RED,
-                                    LampState.YELLOW,
-                                    LampState.YELLOW,
-                                    LampState.RED,
-                                    LampState.YELLOW,
-                                    LampState.YELLOW,
-                                ),
-                            oneMinuteRow = List(4) { LampState.YELLOW },
-                        ),
-                ),
+            uiState = createPreviewState(23, 59, 59),
             onAction = {},
         )
     }
+}
+
+/**
+ * Creates preview state for given time.
+ *
+ * @param hours Hours (0-23)
+ * @param minutes Minutes (0-59)
+ * @param seconds Seconds (0-59)
+ * @return BerlinClockUiState with converted time
+ */
+private fun createPreviewState(
+    hours: Int,
+    minutes: Int,
+    seconds: Int,
+): BerlinClockUiState {
+    val converter = BerlinClockConverter()
+    return BerlinClockUiState(
+        currentTime = LocalTime.of(hours, minutes, seconds),
+        berlinTime = converter.convert(hours, minutes, seconds),
+    )
 }

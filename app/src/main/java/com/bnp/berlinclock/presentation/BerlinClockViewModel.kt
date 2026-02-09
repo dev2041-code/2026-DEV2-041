@@ -35,41 +35,33 @@ class BerlinClockViewModel
         }
 
         /**
+         * Handles all user actions.
+         *
          * @param action The user action to handle
          */
         fun onAction(action: BerlinClockAction) {
             when (action) {
-                is BerlinClockAction.IncrementHours -> {
-                    val newTime = _uiState.value.currentTime.plusHours(1)
-                    updateTime(newTime)
-                }
-                is BerlinClockAction.DecrementHours -> {
-                    val newTime = _uiState.value.currentTime.minusHours(1)
-                    updateTime(newTime)
-                }
-                is BerlinClockAction.IncrementMinutes -> {
-                    val newTime = _uiState.value.currentTime.plusMinutes(1)
-                    updateTime(newTime)
-                }
-                is BerlinClockAction.DecrementMinutes -> {
-                    val newTime = _uiState.value.currentTime.minusMinutes(1)
-                    updateTime(newTime)
-                }
-                is BerlinClockAction.IncrementSeconds -> {
-                    val newTime = _uiState.value.currentTime.plusSeconds(1)
-                    updateTime(newTime)
-                }
-                is BerlinClockAction.DecrementSeconds -> {
-                    val newTime = _uiState.value.currentTime.minusSeconds(1)
-                    updateTime(newTime)
-                }
-                is BerlinClockAction.SetCurrentTime -> {
-                    updateTime(LocalTime.now())
-                }
-                is BerlinClockAction.UpdateTime -> {
-                    updateTime(action.time)
-                }
+                is BerlinClockAction.AdjustTime -> adjustTime(action.unit, action.delta)
+                is BerlinClockAction.UpdateTime -> updateTime(action.time)
             }
+        }
+
+        /**
+         * Adjusts current time using provided transformation.
+         * @param Function to transform LocalTime
+         */
+        private fun adjustTime(
+            unit: BerlinClockAction.TimeUnit,
+            delta: Long,
+        ) {
+            val currentTime = _uiState.value.currentTime
+            val newTime =
+                when (unit) {
+                    BerlinClockAction.TimeUnit.HOURS -> currentTime.plusHours(delta)
+                    BerlinClockAction.TimeUnit.MINUTES -> currentTime.plusMinutes(delta)
+                    BerlinClockAction.TimeUnit.SECONDS -> currentTime.plusSeconds(delta)
+                }
+            updateTime(newTime)
         }
 
         /**

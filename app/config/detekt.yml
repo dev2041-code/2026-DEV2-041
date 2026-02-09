@@ -4,20 +4,31 @@ build:
 complexity:
     LongMethod:
         active: true
-        threshold: 60
-    ComplexMethod:
+        threshold: 50
+    CyclomaticComplexMethod:
         active: true
-        threshold: 15
+        threshold: 8
     LongParameterList:
         active: true
-        threshold: 10
+        functionThreshold: 6
+        constructorThreshold: 7
         ignoreDefaultParameters: true
+    NestedBlockDepth:
+        active: true
+        threshold: 4
+    TooManyFunctions:
+        active: true
+        thresholdInFiles: 15
+        thresholdInClasses: 15
 
 formatting:
     Indentation:
         active: false
     FunctionNaming:
         active: false
+    MaximumLineLength:
+        active: true
+        maxLineLength: 120
 
 naming:
     FunctionNaming:
@@ -25,6 +36,12 @@ naming:
 
 performance:
     ForEachOnRange:
+        active: true
+
+potential-bugs:
+    EqualsWithHashCodeExist:
+        active: true
+    UnsafeCallOnNullableType:
         active: true
 
 style:
@@ -37,3 +54,6 @@ style:
         active: true
         ignoreAnnotated:
             - 'Preview'
+    ReturnCount:
+        active: true
+        max: 3
