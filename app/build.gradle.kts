@@ -58,7 +58,11 @@ android {
     lint {
         checkTestSources = false
         abortOnError = false
-        disable += listOf("UnusedResources")
+        disable += listOf(
+            "UnusedResources",
+            "ObsoleteLintCustomCheck",
+            "GradleDependency",
+        )
     }
 }
 
