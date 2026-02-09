@@ -13,8 +13,7 @@ class BerlinClockConverter {
      * @param seconds The seconds value (0-59)
      * @return YELLOW for even seconds, OFF for odd
      */
-    fun convertSeconds(seconds: Int): LampState =
-        if (seconds % 2 == 0) LampState.YELLOW else LampState.OFF
+    fun convertSeconds(seconds: Int): LampState = if (seconds % 2 == 0) LampState.YELLOW else LampState.OFF
 
     /**
      * Converts hours to five-hour lamp row.

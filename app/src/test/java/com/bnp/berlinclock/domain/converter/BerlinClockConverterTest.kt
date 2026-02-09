@@ -1,9 +1,9 @@
 package com.bnp.berlinclock.domain.converter
 
 import com.bnp.berlinclock.domain.model.LampState
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-import org.junit.Assert.assertEquals
 
 class BerlinClockConverterTest {
     private lateinit var converter: BerlinClockConverter
@@ -27,6 +27,7 @@ class BerlinClockConverterTest {
         assertEquals(LampState.OFF, converter.convertSeconds(3))
         assertEquals(LampState.OFF, converter.convertSeconds(59))
     }
+
     // FIVE HOUR ROW
     @Test
     fun `should return all OFF for 0-4 hours in five hour row`() {
@@ -92,23 +93,26 @@ class BerlinClockConverterTest {
     @Test
     fun `should have RED at quarter positions for 32 minutes`() {
         val result = converter.convertFiveMinuteRow(32)
-        assertEquals(LampState.RED, result[2]) // Position 3
-        assertEquals(LampState.RED, result[5]) // Position 6
+        // Position 3
+        assertEquals(LampState.RED, result[2])
+        // Position 6
+        assertEquals(LampState.RED, result[5])
     }
 
     @Test
     fun `should return correct pattern for 59 minutes`() {
+        // Quarter markers at positions 3, 6, 9
         val expected =
             listOf(
                 LampState.YELLOW,
                 LampState.YELLOW,
-                LampState.RED, // Position 3
+                LampState.RED,
                 LampState.YELLOW,
                 LampState.YELLOW,
-                LampState.RED, // Position 6
+                LampState.RED,
                 LampState.YELLOW,
                 LampState.YELLOW,
-                LampState.RED, // Position 9
+                LampState.RED,
                 LampState.YELLOW,
                 LampState.YELLOW,
             )

@@ -6,7 +6,6 @@ import java.time.LocalTime
  * Sealed hierarchy of all user actions for Berlin Clock.
  */
 sealed class BerlinClockAction {
-
     data object IncrementHours : BerlinClockAction()
 
     data object DecrementHours : BerlinClockAction()

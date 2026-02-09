@@ -120,29 +120,31 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         csv.required.set(false)
     }
 
-    val fileFilter = listOf(
-        "**/R.class",
-        "**/R$*.class",
-        "**/BuildConfig.*",
-        "**/Manifest*.*",
-        "**/*Test*.*",
-        "android/**/*.*",
-        "**/di/**",
-        "**/ui/**",
-        "**/BerlinClockApplication*.*",
-        "**/MainActivity*.*",
-        "**/ComposableSingletons*.*",
-        "**/*$$*.*",
-        "**/BuildConfig*.*",
-        "**/*_Factory*.*",
-        "**/*_HiltModules*.*",
-        "**/*_Provide*Factory*.*",
-        "**/Hilt_*.*",
-    )
+    val fileFilter =
+        listOf(
+            "**/R.class",
+            "**/R$*.class",
+            "**/BuildConfig.*",
+            "**/Manifest*.*",
+            "**/*Test*.*",
+            "android/**/*.*",
+            "**/di/**",
+            "**/ui/**",
+            "**/BerlinClockApplication*.*",
+            "**/MainActivity*.*",
+            "**/ComposableSingletons*.*",
+            "**/*$$*.*",
+            "**/BuildConfig*.*",
+            "**/*_Factory*.*",
+            "**/*_HiltModules*.*",
+            "**/*_Provide*Factory*.*",
+            "**/Hilt_*.*",
+        )
 
-    val debugTree = fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
-        exclude(fileFilter)
-    }
+    val debugTree =
+        fileTree("${layout.buildDirectory.get()}/tmp/kotlin-classes/debug") {
+            exclude(fileFilter)
+        }
 
     val mainSrc = "${project.projectDir}/src/main/java"
 
