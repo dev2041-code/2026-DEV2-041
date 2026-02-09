@@ -213,4 +213,35 @@ class BerlinClockConverterTest {
         )
         assertEquals(List(4) { LampState.YELLOW }, berlinTime.oneMinuteRow)
     }
+
+    // VALIDATION
+    @Test(expected = IllegalArgumentException::class)
+    fun `should throw exception for hours less than 0`() {
+        converter.convert(-1, 0, 0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `should throw exception for hours greater than 23`() {
+        converter.convert(24, 0, 0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `should throw exception for minutes less than 0`() {
+        converter.convert(0, -1, 0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `should throw exception for minutes greater than 59`() {
+        converter.convert(0, 60, 0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `should throw exception for seconds less than 0`() {
+        converter.convert(0, 0, -1)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `should throw exception for seconds greater than 59`() {
+        converter.convert(0, 0, 60)
+    }
 }
