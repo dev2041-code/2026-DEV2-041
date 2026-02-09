@@ -13,7 +13,7 @@ class BerlinClockConverterTest {
         converter = BerlinClockConverter()
     }
 
-    // SECONDS LAMP - RED PHASE
+    // SECONDS LAMP
     @Test
     fun `should return YELLOW for even seconds`() {
         assertEquals(LampState.YELLOW, converter.convertSeconds(0))
@@ -26,5 +26,26 @@ class BerlinClockConverterTest {
         assertEquals(LampState.OFF, converter.convertSeconds(1))
         assertEquals(LampState.OFF, converter.convertSeconds(3))
         assertEquals(LampState.OFF, converter.convertSeconds(59))
+    }
+    // FIVE HOUR ROW
+    @Test
+    fun `should return all OFF for 0-4 hours in five hour row`() {
+        val expected = List(4) { LampState.OFF }
+        assertEquals(expected, converter.convertFiveHourRow(0))
+        assertEquals(expected, converter.convertFiveHourRow(4))
+    }
+
+    @Test
+    fun `should return 1 RED for 5-9 hours`() {
+        val expected = listOf(LampState.RED, LampState.OFF, LampState.OFF, LampState.OFF)
+        assertEquals(expected, converter.convertFiveHourRow(5))
+        assertEquals(expected, converter.convertFiveHourRow(9))
+    }
+
+    @Test
+    fun `should return 4 RED for 20-23 hours`() {
+        val expected = List(4) { LampState.RED }
+        assertEquals(expected, converter.convertFiveHourRow(20))
+        assertEquals(expected, converter.convertFiveHourRow(23))
     }
 }
