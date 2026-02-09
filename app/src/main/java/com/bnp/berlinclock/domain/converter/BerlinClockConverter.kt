@@ -96,17 +96,23 @@ class BerlinClockConverter {
      * @param minutes Minutes (0-59)
      * @param seconds Seconds (0-59)
      * @return BerlinTime representing the lamp states
+     * @throws IllegalArgumentException if any parameter is out of valid range
      */
     fun convert(
         hours: Int,
         minutes: Int,
         seconds: Int,
-    ): BerlinTime =
-        BerlinTime(
+    ): BerlinTime {
+        require(hours in 0..23) { "Hours must be between 0 and 23, got $hours" }
+        require(minutes in 0..59) { "Minutes must be between 0 and 59, got $minutes" }
+        require(seconds in 0..59) { "Seconds must be between 0 and 59, got $seconds" }
+
+        return BerlinTime(
             secondsLamp = convertSeconds(seconds),
             fiveHourRow = convertFiveHourRow(hours),
             oneHourRow = convertOneHourRow(hours),
             fiveMinuteRow = convertFiveMinuteRow(minutes),
             oneMinuteRow = convertOneMinuteRow(minutes),
         )
+    }
 }
