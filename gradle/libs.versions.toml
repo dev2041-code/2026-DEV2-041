@@ -1,6 +1,5 @@
 [versions]
 agp = "8.7.3"
-detektFormatting = "1.23.8"
 detektFormattingVersion = "1.23.5"
 kotlin = "2.1.0"
 coreKtx = "1.15.0"
@@ -17,7 +16,6 @@ coroutinesTest = "1.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektFormatting" }
 detekt-formatting-v1235 = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detektFormattingVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
