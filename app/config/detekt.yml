@@ -1,0 +1,39 @@
+build:
+    maxIssues: 0
+
+complexity:
+    LongMethod:
+        active: true
+        threshold: 60
+    ComplexMethod:
+        active: true
+        threshold: 15
+    LongParameterList:
+        active: true
+        threshold: 10
+        ignoreDefaultParameters: true
+
+formatting:
+    Indentation:
+        active: false
+    FunctionNaming:
+        active: false
+
+naming:
+    FunctionNaming:
+        active: false
+
+performance:
+    ForEachOnRange:
+        active: true
+
+style:
+    MaxLineLength:
+        active: true
+        maxLineLength: 120
+    MagicNumber:
+        active: false
+    UnusedPrivateMember:
+        active: true
+        ignoreAnnotated:
+            - 'Preview'
