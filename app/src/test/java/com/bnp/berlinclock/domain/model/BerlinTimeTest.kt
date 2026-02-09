@@ -71,4 +71,26 @@ class BerlinTimeTest {
         val expected = "O\nRROO\nRRRO\nYYROOOOOOOO\nYYOO"
         assertEquals(expected, berlinTime.toString())
     }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `should reject invalid oneHourRow size`() {
+        BerlinTime(
+            secondsLamp = LampState.OFF,
+            fiveHourRow = List(4) { LampState.OFF },
+            oneHourRow = List(3) { LampState.OFF },
+            fiveMinuteRow = List(11) { LampState.OFF },
+            oneMinuteRow = List(4) { LampState.OFF },
+        )
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `should reject invalid oneMinuteRow size`() {
+        BerlinTime(
+            secondsLamp = LampState.OFF,
+            fiveHourRow = List(4) { LampState.OFF },
+            oneHourRow = List(4) { LampState.OFF },
+            fiveMinuteRow = List(11) { LampState.OFF },
+            oneMinuteRow = List(5) { LampState.OFF },
+        )
+    }
 }
