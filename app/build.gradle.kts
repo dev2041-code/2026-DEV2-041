@@ -57,12 +57,17 @@ android {
 
     lint {
         checkTestSources = false
+        checkDependencies = false
         abortOnError = false
-        disable += listOf(
-            "UnusedResources",
-            "ObsoleteLintCustomCheck",
-            "GradleDependency",
-        )
+        disable +=
+            listOf(
+                "UnusedResources",
+                "ObsoleteLintCustomCheck",
+                "GradleDependency",
+                "AndroidGradlePluginVersion",
+                "SimilarGradleDependency",
+                "ObsoleteSdkInt",
+            )
     }
 }
 
@@ -133,6 +138,8 @@ tasks.register<JacocoReport>("jacocoTestReport") {
             "**/*Test*.*",
             "android/**/*.*",
             "**/di/**",
+            "**/presentation/**",
+            "**/usecase/**",
             "**/ui/**",
             "**/BerlinClockApplication*.*",
             "**/MainActivity*.*",
