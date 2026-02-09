@@ -14,4 +14,19 @@ class BerlinClockConverter {
      */
     fun convertSeconds(seconds: Int): LampState =
         if (seconds % 2 == 0) LampState.YELLOW else LampState.OFF
+
+    /**
+     * Converts hours to five-hour lamp row.
+     *
+     * Each lamp represents 5 hours.
+     *
+     * @param hours The hours value (0-23)
+     * @return List of 4 lamp states (RED for on, OFF for off)
+     */
+    fun convertFiveHourRow(hours: Int): List<LampState> {
+        val lampsOn = hours / 5
+        return List(4) { index ->
+            if (index < lampsOn) LampState.RED else LampState.OFF
+        }
+    }
 }
