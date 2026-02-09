@@ -44,4 +44,32 @@ class BerlinClockConverter {
             if (index < lampsOn) LampState.RED else LampState.OFF
         }
     }
+
+    /**
+     * Converts minutes to five-minute lamp row.
+     *
+     * Each lamp represents 5 minutes. Lamps at positions 3, 6, and 9
+     * (indices 2, 5, 8) are RED to mark quarter hours.
+     *
+     * @param minutes The minutes value (0-59)
+     * @return List of 11 lamp states
+     */
+    fun convertFiveMinuteRow(minutes: Int): List<LampState> {
+        val lampsOn = minutes / 5
+        return List(11) { index ->
+            when {
+                index >= lampsOn -> LampState.OFF
+                isQuarterPosition(index) -> LampState.RED
+                else -> LampState.YELLOW
+            }
+        }
+    }
+
+    /**
+     * Determines if a position represents a quarter hour.
+     *
+     * @param index Zero-based index (0-10)
+     * @return true if position 3, 6, or 9 (indices 2, 5, 8)
+     */
+    private fun isQuarterPosition(index: Int): Boolean = (index + 1) % 3 == 0
 }
