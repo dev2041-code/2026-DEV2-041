@@ -114,4 +114,27 @@ class BerlinClockConverterTest {
             )
         assertEquals(expected, converter.convertFiveMinuteRow(59))
     }
+
+    // ONE MINUTE ROW
+    @Test
+    fun `should return all OFF for minutes divisible by 5`() {
+        val expected = List(4) { LampState.OFF }
+        assertEquals(expected, converter.convertOneMinuteRow(0))
+        assertEquals(expected, converter.convertOneMinuteRow(15))
+        assertEquals(expected, converter.convertOneMinuteRow(55))
+    }
+
+    @Test
+    fun `should return 2 YELLOW for minutes ending in 2 or 7`() {
+        val expected = listOf(LampState.YELLOW, LampState.YELLOW, LampState.OFF, LampState.OFF)
+        assertEquals(expected, converter.convertOneMinuteRow(17))
+        assertEquals(expected, converter.convertOneMinuteRow(32))
+    }
+
+    @Test
+    fun `should return 4 YELLOW for minutes ending in 4 or 9`() {
+        val expected = List(4) { LampState.YELLOW }
+        assertEquals(expected, converter.convertOneMinuteRow(9))
+        assertEquals(expected, converter.convertOneMinuteRow(59))
+    }
 }
