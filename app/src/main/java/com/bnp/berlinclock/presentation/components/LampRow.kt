@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import com.bnp.berlinclock.R
 import com.bnp.berlinclock.domain.model.LampState
@@ -60,17 +62,23 @@ fun LampRow(
         ) {
             lamps.forEach { lampState ->
                 Box(
-                    modifier =
-                        Modifier
-                            .weight(1f)
-                            .height(Dimensions.LampHeight)
-                            .clip(RoundedCornerShape(Dimensions.LampCornerRadius))
-                            .background(getLampColor(lampState))
-                            .border(
-                                width = Dimensions.LampBorderWidth,
-                                color = Color.White.copy(alpha = 0.2f),
-                                shape = RoundedCornerShape(Dimensions.LampCornerRadius),
-                            ),
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(Dimensions.LampHeight)
+                        .clip(RoundedCornerShape(Dimensions.LampCornerRadius))
+                        .background(getLampColor(lampState))
+                        .border(
+                            width = Dimensions.LampBorderWidth,
+                            color = Color.White.copy(alpha = 0.2f),
+                            shape = RoundedCornerShape(Dimensions.LampCornerRadius),
+                        )
+                        .semantics {
+                            contentDescription = when (lampState) {
+                                LampState.RED -> "Red lamp on"
+                                LampState.YELLOW -> "Yellow lamp on"
+                                LampState.OFF -> "Lamp off"
+                            }
+                        },
                 )
             }
         }
