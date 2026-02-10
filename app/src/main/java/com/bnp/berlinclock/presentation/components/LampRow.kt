@@ -18,11 +18,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.bnp.berlinclock.domain.model.LampState
 import com.bnp.berlinclock.presentation.theme.BerlinClockTheme
 import com.bnp.berlinclock.presentation.theme.BerlinRed
 import com.bnp.berlinclock.presentation.theme.BerlinYellow
+import com.bnp.berlinclock.presentation.theme.Dimensions
 import com.bnp.berlinclock.presentation.theme.LampOff
 
 /**
@@ -49,25 +49,25 @@ fun LampRow(
             color = Color.White.copy(alpha = 0.6f),
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(Dimensions.LampRowSpacer))
 
         // Lamp row
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            horizontalArrangement = Arrangement.spacedBy(Dimensions.LampSpacing),
         ) {
             lamps.forEach { lampState ->
                 Box(
                     modifier =
                         Modifier
                             .weight(1f)
-                            .height(35.dp)
-                            .clip(RoundedCornerShape(6.dp))
+                            .height(Dimensions.LampHeight)
+                            .clip(RoundedCornerShape(Dimensions.LampCornerRadius))
                             .background(getLampColor(lampState))
                             .border(
-                                width = 2.dp,
+                                width = Dimensions.LampBorderWidth,
                                 color = Color.White.copy(alpha = 0.2f),
-                                shape = RoundedCornerShape(6.dp),
+                                shape = RoundedCornerShape(Dimensions.LampCornerRadius),
                             ),
                 )
             }

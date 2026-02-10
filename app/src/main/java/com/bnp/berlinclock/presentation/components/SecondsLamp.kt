@@ -1,7 +1,6 @@
 package com.bnp.berlinclock.presentation.components
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,25 +15,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.bnp.berlinclock.R
+    import com.bnp.berlinclock.R
 import com.bnp.berlinclock.domain.model.LampState
 import com.bnp.berlinclock.presentation.theme.BerlinClockTheme
 import com.bnp.berlinclock.presentation.theme.BerlinYellow
+import com.bnp.berlinclock.presentation.theme.Dimensions
 import com.bnp.berlinclock.presentation.theme.LampOff
 
 /**
  * Seconds lamp component for Berlin Clock.
  *
- * @param lampState Current state of the seconds lamp
- * @param modifier Optional modifier for layout customization
  */
 @Composable
 fun SecondsLamp(
     lampState: LampState,
     modifier: Modifier = Modifier,
 ) {
+    val lampOnDescription = stringResource(R.string.seconds_lamp_on)
+    val lampOffDescription = stringResource(R.string.seconds_lamp_off)
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
@@ -46,20 +47,29 @@ fun SecondsLamp(
             color = Color.White.copy(alpha = 0.6f),
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Dimensions.SecondLampSpacer))
 
         // Circular lamp
         Box(
             modifier =
-                Modifier
-                    .size(60.dp)
+                modifier
+                    .size(Dimensions.SecondLampSize)
                     .clip(CircleShape)
-                    .background(if (lampState == LampState.YELLOW) BerlinYellow else LampOff)
-                    .border(
-                        width = 2.dp,
-                        color = Color.White.copy(alpha = 0.2f),
-                        shape = CircleShape,
-                    ),
+                    .background(
+                        if (lampState == LampState.YELLOW) {
+                            BerlinYellow
+                        } else {
+                            LampOff
+                        },
+                    )
+                    .semantics {
+                        contentDescription =
+                            if (lampState == LampState.YELLOW) {
+                                lampOnDescription
+                            } else {
+                                lampOffDescription
+                            }
+                    },
         )
     }
 }

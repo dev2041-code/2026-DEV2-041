@@ -9,4 +9,6 @@
     <string name="hours_label">HOURS</string>
     <string name="minutes_label">MINUTES</string>
     <string name="seconds_label">SECONDS</string>
+    <string name="seconds_lamp_on">Seconds lamp on</string>
+    <string name="seconds_lamp_off">Seconds lamp off</string>
 </resources>
