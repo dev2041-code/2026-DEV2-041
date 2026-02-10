@@ -88,7 +88,7 @@ private fun BerlinClockScreenContent(
 
         // Digital Time Display
         Text(
-            text = uiState.currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss")),
+            text = uiState.currentTime.format(TIME_FORMATTER),
             style = MaterialTheme.typography.displayMedium,
             color = Color.White,
             fontWeight = FontWeight.Bold,
@@ -128,9 +128,10 @@ private fun BerlinClockScreenContent(
 /**
  * Berlin Clock lamp display.
  *
- * @param berlinTime The Berlin time to display
- * @param modifier Optional modifier
  */
+private val TIME_FORMATTER: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("HH:mm:ss")
+
 @Composable
 private fun BerlinClockDisplay(
     berlinTime: BerlinTime,
