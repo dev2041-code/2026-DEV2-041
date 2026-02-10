@@ -1,14 +1,12 @@
 package com.bnp.berlinclock.presentation
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.bnp.berlinclock.domain.usecase.ConvertTimeToBerlinClockUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -76,18 +74,15 @@ class BerlinClockViewModel
 
         /**
          * Converts current time to Berlin Clock format.
-         * Updates state atomically to prevent race conditions.
          */
         private fun updateBerlinTime() {
-            viewModelScope.launch {
-                val time = _uiState.value.currentTime
-                val berlinTime =
-                    convertTimeToBerlinClock(
-                        time.hour,
-                        time.minute,
-                        time.second,
-                    )
-                _uiState.update { it.copy(berlinTime = berlinTime) }
-            }
+            val time = _uiState.value.currentTime
+            val berlinTime =
+                convertTimeToBerlinClock(
+                    time.hour,
+                    time.minute,
+                    time.second,
+                )
+            _uiState.update { it.copy(berlinTime = berlinTime) }
         }
     }
