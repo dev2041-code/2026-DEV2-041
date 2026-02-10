@@ -25,7 +25,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bnp.berlinclock.R
 import com.bnp.berlinclock.domain.converter.BerlinClockConverter
@@ -268,7 +267,7 @@ private fun TimeControl(
         // Value Display
         Text(
             text = value.toString().padStart(2, '0'),
-            fontSize = 24.sp,
+            fontSize = Dimensions.ControlValueFontSize,
             color = Color.White,
             fontWeight = FontWeight.Bold,
         )
