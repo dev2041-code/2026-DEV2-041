@@ -34,6 +34,7 @@ import com.bnp.berlinclock.presentation.components.LampRow
 import com.bnp.berlinclock.presentation.components.SecondsLamp
 import com.bnp.berlinclock.presentation.theme.Background
 import com.bnp.berlinclock.presentation.theme.BerlinClockTheme
+import com.bnp.berlinclock.presentation.theme.Dimensions
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
@@ -75,9 +76,9 @@ private fun BerlinClockScreenContent(
             modifier
                 .fillMaxSize()
                 .background(Background)
-                .padding(16.dp),
+                .padding(Dimensions.ScreenPadding),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = Arrangement.spacedBy(Dimensions.ScreenVerticalSpacing),
     ) {
         // Title
         Text(
@@ -94,14 +95,14 @@ private fun BerlinClockScreenContent(
             fontWeight = FontWeight.Bold,
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Dimensions.ScreenDisplaySpacer))
 
         // Berlin Clock Display
         uiState.berlinTime?.let { time ->
             BerlinClockDisplay(berlinTime = time)
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(Dimensions.ScreenControlsSpacer))
 
         // Time Controls
         TimeControls(
@@ -139,13 +140,13 @@ private fun BerlinClockDisplay(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(Dimensions.ClockVerticalSpacing),
         modifier = modifier,
     ) {
         // Seconds lamp
         SecondsLamp(lampState = berlinTime.secondsLamp)
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Dimensions.ScreenDisplaySpacer))
 
         // Five hours row
         LampRow(
@@ -247,22 +248,22 @@ private fun TimeControl(
             color = Color.White.copy(alpha = 0.6f),
         )
 
-        Spacer(modifier = Modifier.height(4.dp))
+        Spacer(modifier = Modifier.height(Dimensions.ControlSmallSpacer))
 
         // + Button
         Button(
             onClick = { onAction(BerlinClockAction.AdjustTime(unit, 1)) },
-            modifier = Modifier.size(45.dp),
+            modifier = Modifier.size(Dimensions.ControlButtonSize),
             contentPadding = PaddingValues(0.dp),
             colors =
                 ButtonDefaults.buttonColors(
                     containerColor = Color.White.copy(alpha = 0.15f),
                 ),
         ) {
-            Text("+", fontSize = 20.sp, color = Color.White)
+            Text("+", fontSize = Dimensions.ControlButtonFontSize, color = Color.White)
         }
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Dimensions.ControlValueSpacer))
 
         // Value Display
         Text(
@@ -272,19 +273,19 @@ private fun TimeControl(
             fontWeight = FontWeight.Bold,
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(Dimensions.ControlButtonSize))
 
         // - Button
         Button(
             onClick = { onAction(BerlinClockAction.AdjustTime(unit, -1)) },
-            modifier = Modifier.size(45.dp),
+            modifier = Modifier.size(Dimensions.ControlButtonSize),
             contentPadding = PaddingValues(0.dp),
             colors =
                 ButtonDefaults.buttonColors(
                     containerColor = Color.White.copy(alpha = 0.15f),
                 ),
         ) {
-            Text("-", fontSize = 20.sp, color = Color.White)
+            Text("-", fontSize = Dimensions.ControlButtonFontSize, color = Color.White)
         }
     }
 }

@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-    import com.bnp.berlinclock.R
+import com.bnp.berlinclock.R
 import com.bnp.berlinclock.domain.model.LampState
 import com.bnp.berlinclock.presentation.theme.BerlinClockTheme
 import com.bnp.berlinclock.presentation.theme.BerlinYellow

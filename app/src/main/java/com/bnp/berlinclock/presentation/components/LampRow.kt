@@ -17,7 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.bnp.berlinclock.R
 import com.bnp.berlinclock.domain.model.LampState
 import com.bnp.berlinclock.presentation.theme.BerlinClockTheme
 import com.bnp.berlinclock.presentation.theme.BerlinRed
@@ -102,7 +104,7 @@ private fun LampRowFiveHoursPreview() {
                     LampState.OFF,
                     LampState.OFF,
                 ),
-            label = "5 HOURS",
+            label = stringResource(R.string.five_hours_label),
         )
     }
 }
@@ -129,7 +131,7 @@ private fun LampRowFiveMinutesPreview() {
                     LampState.OFF,
                     LampState.OFF,
                 ),
-            label = "5 MINUTES",
+            label = stringResource(R.string.five_hours_label),
         )
     }
 }
@@ -149,7 +151,7 @@ private fun LampRowAllOnPreview() {
                     LampState.RED,
                     LampState.RED,
                 ),
-            label = "1 HOUR",
+            label = stringResource(R.string.one_hour_label),
         )
     }
 }
