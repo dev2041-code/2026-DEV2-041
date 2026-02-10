@@ -62,23 +62,25 @@ fun LampRow(
         ) {
             lamps.forEach { lampState ->
                 Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .height(Dimensions.LampHeight)
-                        .clip(RoundedCornerShape(Dimensions.LampCornerRadius))
-                        .background(getLampColor(lampState))
-                        .border(
-                            width = Dimensions.LampBorderWidth,
-                            color = Color.White.copy(alpha = 0.2f),
-                            shape = RoundedCornerShape(Dimensions.LampCornerRadius),
-                        )
-                        .semantics {
-                            contentDescription = when (lampState) {
-                                LampState.RED -> "Red lamp on"
-                                LampState.YELLOW -> "Yellow lamp on"
-                                LampState.OFF -> "Lamp off"
-                            }
-                        },
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .height(Dimensions.LampHeight)
+                            .clip(RoundedCornerShape(Dimensions.LampCornerRadius))
+                            .background(getLampColor(lampState))
+                            .border(
+                                width = Dimensions.LampBorderWidth,
+                                color = Color.White.copy(alpha = 0.2f),
+                                shape = RoundedCornerShape(Dimensions.LampCornerRadius),
+                            )
+                            .semantics {
+                                contentDescription =
+                                    when (lampState) {
+                                        LampState.RED -> "Red lamp on"
+                                        LampState.YELLOW -> "Yellow lamp on"
+                                        LampState.OFF -> "Lamp off"
+                                    }
+                            },
                 )
             }
         }
