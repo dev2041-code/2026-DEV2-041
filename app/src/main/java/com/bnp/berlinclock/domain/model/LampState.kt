@@ -1,26 +1,32 @@
 package com.bnp.berlinclock.domain.model
 
 /**
- * Represents the state of a lamp in the Berlin Clock.
- *
- * Type-safe representation avoiding raw string literals.
+ * Binary state of a lamp.
  */
-enum class LampState(val symbol: Char) {
-    /** Lamp is on and displays red */
-    RED('R'),
+enum class LampState {
+    /**
+     * Lamp is illuminated.
+     */
+    ON,
 
-    /** Lamp is on and displays yellow */
-    YELLOW('Y'),
+    /**
+     * Lamp is not illuminated.
+     */
+    OFF,
+}
 
-    /** Lamp is off */
-    OFF('O'),
-    ;
+/**
+ * Color of a lamp when illuminated.
+ *
+ */
+enum class LampColor {
+    /**
+     * Red lamp (used for hours and quarter markers).
+     */
+    RED,
 
-    override fun toString(): String = symbol.toString()
-
-    companion object {
-        fun fromChar(char: Char): LampState =
-            entries.find { it.symbol == char }
-                ?: throw IllegalArgumentException("Invalid lamp state: $char")
-    }
+    /**
+     * Yellow lamp (used for seconds and minutes).
+     */
+    YELLOW,
 }

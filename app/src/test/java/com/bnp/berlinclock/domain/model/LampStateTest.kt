@@ -5,29 +5,14 @@ import org.junit.Test
 
 class LampStateTest {
     @Test
-    fun `should convert RED char to LampState`() {
-        assertEquals(LampState.RED, LampState.fromChar('R'))
+    fun `LampState has ON and OFF values`() {
+        assertEquals(LampState.ON, LampState.ON)
+        assertEquals(LampState.OFF, LampState.OFF)
     }
 
     @Test
-    fun `should convert YELLOW char to LampState`() {
-        assertEquals(LampState.YELLOW, LampState.fromChar('Y'))
-    }
-
-    @Test
-    fun `should convert OFF char to LampState`() {
-        assertEquals(LampState.OFF, LampState.fromChar('O'))
-    }
-
-    @Test(expected = IllegalArgumentException::class)
-    fun `should throw exception for invalid char`() {
-        LampState.fromChar('X')
-    }
-
-    @Test
-    fun `should convert to string correctly`() {
-        assertEquals("R", LampState.RED.toString())
-        assertEquals("Y", LampState.YELLOW.toString())
-        assertEquals("O", LampState.OFF.toString())
+    fun `LampColor has RED and YELLOW values`() {
+        assertEquals(LampColor.RED, LampColor.RED)
+        assertEquals(LampColor.YELLOW, LampColor.YELLOW)
     }
 }

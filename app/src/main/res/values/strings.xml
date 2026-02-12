@@ -1,14 +1,21 @@
 <resources>
     <string name="app_name">Berlin Clock</string>
     <string name="berlin_clock_title">BERLIN CLOCK</string>
+
+    <!-- Lamp Labels -->
+    <string name="seconds_lamp_label">SECONDS</string>
     <string name="five_hours_label">5 HOURS</string>
     <string name="one_hour_label">1 HOUR</string>
     <string name="five_minutes_label">5 MINUTES</string>
     <string name="one_minute_label">1 MINUTE</string>
-    <string name="set_current_time">Set Current Time</string>
+
+    <!-- Time Controls -->
     <string name="hours_label">HOURS</string>
     <string name="minutes_label">MINUTES</string>
     <string name="seconds_label">SECONDS</string>
+    <string name="set_current_time">Set Current Time</string>
+
+    <!-- Accessibility -->
     <string name="seconds_lamp_on">Seconds lamp on</string>
     <string name="seconds_lamp_off">Seconds lamp off</string>
 </resources>

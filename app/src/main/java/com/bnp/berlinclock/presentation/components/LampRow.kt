@@ -17,36 +17,80 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
-import com.bnp.berlinclock.R
+import com.bnp.berlinclock.domain.model.LampColor
 import com.bnp.berlinclock.domain.model.LampState
 import com.bnp.berlinclock.presentation.theme.BerlinClockTheme
-import com.bnp.berlinclock.presentation.theme.BerlinRed
-import com.bnp.berlinclock.presentation.theme.BerlinYellow
 import com.bnp.berlinclock.presentation.theme.Dimensions
-import com.bnp.berlinclock.presentation.theme.LampOff
+
+/**
+ * Determines the display color for a lamp.
+ *
+ * @param lampState Current state of the lamp (ON/OFF)
+ * @param lampColor Color type for this lamp (RED/YELLOW)
+ * @param isQuarterPosition Whether this is a quarter marker position
+ * @return Color from MaterialTheme
+ */
+@Composable
+private fun getLampColor(
+    lampState: LampState,
+    lampColor: LampColor,
+    isQuarterPosition: Boolean,
+): Color =
+    when {
+        lampState == LampState.OFF -> MaterialTheme.colorScheme.tertiary
+        isQuarterPosition -> MaterialTheme.colorScheme.secondary
+        lampColor == LampColor.RED -> MaterialTheme.colorScheme.secondary
+        else -> MaterialTheme.colorScheme.primary
+    }
+
+/**
+ * Determines the accessibility description for a lamp.
+ *
+ * @param lampState Current state of the lamp (ON/OFF)
+ * @param lampColor Color type for this lamp (RED/YELLOW)
+ * @param isQuarterPosition Whether this is a quarter marker position
+ * @return Accessibility description string
+ */
+private fun getAccessibilityDescription(
+    lampState: LampState,
+    lampColor: LampColor,
+    isQuarterPosition: Boolean,
+): String =
+    when (lampState) {
+        LampState.ON ->
+            when {
+                isQuarterPosition -> "Red lamp on"
+                lampColor == LampColor.RED -> "Red lamp on"
+                else -> "Yellow lamp on"
+            }
+        LampState.OFF -> "Lamp off"
+    }
 
 /**
  * Lamp row component for Berlin Clock.
  *
- * @param lamps List of lamp states (type-safe, no raw strings)
+ *
+ * @param lamps List of lamp states (ON/OFF)
+ * @param lampColor Color for illuminated lamps (RED or YELLOW)
  * @param label Text label to display above the row
- * @param modifier Optional modifier for layout customization
+ * @param quarterPositions Positions that should be RED (for 5-minute row)
+ * @param modifier Optional modifier
  */
 @Composable
 fun LampRow(
     lamps: List<LampState>,
+    lampColor: LampColor,
     label: String,
+    quarterPositions: Set<Int> = emptySet(),
     modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
-        // Label
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
@@ -55,19 +99,20 @@ fun LampRow(
 
         Spacer(modifier = Modifier.height(Dimensions.LampRowSpacer))
 
-        // Lamp row
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(Dimensions.LampSpacing),
         ) {
-            lamps.forEach { lampState ->
+            lamps.forEachIndexed { index, lampState ->
+                val isQuarterPosition = index in quarterPositions
+
                 Box(
                     modifier =
                         Modifier
                             .weight(1f)
                             .height(Dimensions.LampHeight)
                             .clip(RoundedCornerShape(Dimensions.LampCornerRadius))
-                            .background(getLampColor(lampState))
+                            .background(getLampColor(lampState, lampColor, isQuarterPosition))
                             .border(
                                 width = Dimensions.LampBorderWidth,
                                 color = Color.White.copy(alpha = 0.2f),
@@ -75,11 +120,11 @@ fun LampRow(
                             )
                             .semantics {
                                 contentDescription =
-                                    when (lampState) {
-                                        LampState.RED -> "Red lamp on"
-                                        LampState.YELLOW -> "Yellow lamp on"
-                                        LampState.OFF -> "Lamp off"
-                                    }
+                                    getAccessibilityDescription(
+                                        lampState,
+                                        lampColor,
+                                        isQuarterPosition,
+                                    )
                             },
                 )
             }
@@ -88,33 +133,16 @@ fun LampRow(
 }
 
 /**
- * Maps lamp state to display color.
- * @param lampState The lamp state to map
- * @return The corresponding color
- */
-private fun getLampColor(lampState: LampState): Color =
-    when (lampState) {
-        LampState.RED -> BerlinRed
-        LampState.YELLOW -> BerlinYellow
-        LampState.OFF -> LampOff
-    }
-
-/**
- * Preview of five-hour row (2 lamps on).
+ * Preview of five-hour row (RED lamps).
  */
 @Preview(showBackground = true, backgroundColor = 0xFF121212)
 @Composable
 private fun LampRowFiveHoursPreview() {
     BerlinClockTheme {
         LampRow(
-            lamps =
-                listOf(
-                    LampState.RED,
-                    LampState.RED,
-                    LampState.OFF,
-                    LampState.OFF,
-                ),
-            label = stringResource(R.string.five_hours_label),
+            lamps = listOf(LampState.ON, LampState.ON, LampState.OFF, LampState.OFF),
+            lampColor = LampColor.RED,
+            label = "5 HOURS",
         )
     }
 }
@@ -129,39 +157,36 @@ private fun LampRowFiveMinutesPreview() {
         LampRow(
             lamps =
                 listOf(
-                    LampState.YELLOW,
-                    LampState.YELLOW,
-                    LampState.RED,
-                    LampState.YELLOW,
-                    LampState.YELLOW,
-                    LampState.RED,
+                    LampState.ON,
+                    LampState.ON,
+                    LampState.ON,
+                    LampState.ON,
+                    LampState.ON,
+                    LampState.ON,
                     LampState.OFF,
                     LampState.OFF,
                     LampState.OFF,
                     LampState.OFF,
                     LampState.OFF,
                 ),
-            label = stringResource(R.string.five_hours_label),
+            lampColor = LampColor.YELLOW,
+            label = "5 MINUTES",
+            quarterPositions = setOf(2, 5, 8),
         )
     }
 }
 
 /**
- * Preview of all lamps on (4 lamps).
+ * Preview of one-minute row (YELLOW lamps).
  */
 @Preview(showBackground = true, backgroundColor = 0xFF121212)
 @Composable
-private fun LampRowAllOnPreview() {
+private fun LampRowOneMinutePreview() {
     BerlinClockTheme {
         LampRow(
-            lamps =
-                listOf(
-                    LampState.RED,
-                    LampState.RED,
-                    LampState.RED,
-                    LampState.RED,
-                ),
-            label = stringResource(R.string.one_hour_label),
+            lamps = listOf(LampState.ON, LampState.ON, LampState.OFF, LampState.OFF),
+            lampColor = LampColor.YELLOW,
+            label = "1 MINUTE",
         )
     }
 }

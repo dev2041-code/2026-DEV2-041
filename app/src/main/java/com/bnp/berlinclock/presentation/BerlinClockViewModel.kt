@@ -1,6 +1,7 @@
 package com.bnp.berlinclock.presentation
 
 import androidx.lifecycle.ViewModel
+import com.bnp.berlinclock.domain.model.Result
 import com.bnp.berlinclock.domain.usecase.ConvertTimeToBerlinClockUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,6 @@ import javax.inject.Inject
 
 /**
  * ViewModel for Berlin Clock screen.
- * @property convertTimeToBerlinClock Use case for domain logic
  */
 @HiltViewModel
 class BerlinClockViewModel
@@ -28,14 +28,11 @@ class BerlinClockViewModel
         val uiState: StateFlow<BerlinClockUiState> = _uiState.asStateFlow()
 
         init {
-            // Initialize with current Berlin time
             updateBerlinTime()
         }
 
         /**
          * Handles all user actions.
-         *
-         * @param action The user action to handle
          */
         fun onAction(action: BerlinClockAction) {
             when (action) {
@@ -45,8 +42,7 @@ class BerlinClockViewModel
         }
 
         /**
-         * Adjusts current time using provided transformation.
-         * @param Function to transform LocalTime
+         * Adjusts current time by delta for specified unit.
          */
         private fun adjustTime(
             unit: BerlinClockAction.TimeUnit,
@@ -64,8 +60,6 @@ class BerlinClockViewModel
 
         /**
          * Updates the current time and triggers Berlin time conversion.
-         *
-         * @param time The new time to set
          */
         private fun updateTime(time: LocalTime) {
             _uiState.update { it.copy(currentTime = time) }
@@ -74,15 +68,28 @@ class BerlinClockViewModel
 
         /**
          * Converts current time to Berlin Clock format.
+         *
          */
         private fun updateBerlinTime() {
             val time = _uiState.value.currentTime
-            val berlinTime =
-                convertTimeToBerlinClock(
-                    time.hour,
-                    time.minute,
-                    time.second,
-                )
-            _uiState.update { it.copy(berlinTime = berlinTime) }
+
+            when (val result = convertTimeToBerlinClock(time.hour, time.minute, time.second)) {
+                is Result.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            berlinTime = result.value,
+                            error = null,
+                        )
+                    }
+                }
+                is Result.Failure -> {
+                    _uiState.update {
+                        it.copy(
+                            berlinTime = null,
+                            error = result.error.toString(),
+                        )
+                    }
+                }
+            }
         }
     }

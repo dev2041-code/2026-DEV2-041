@@ -21,13 +21,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.bnp.berlinclock.R
 import com.bnp.berlinclock.domain.model.LampState
 import com.bnp.berlinclock.presentation.theme.BerlinClockTheme
-import com.bnp.berlinclock.presentation.theme.BerlinYellow
 import com.bnp.berlinclock.presentation.theme.Dimensions
-import com.bnp.berlinclock.presentation.theme.LampOff
 
 /**
- * Seconds lamp component for Berlin Clock.
+ * Seconds lamp component.
  *
+ * Uses MaterialTheme.colorScheme for colors.
  */
 @Composable
 fun SecondsLamp(
@@ -36,35 +35,34 @@ fun SecondsLamp(
 ) {
     val lampOnDescription = stringResource(R.string.seconds_lamp_on)
     val lampOffDescription = stringResource(R.string.seconds_lamp_off)
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier,
     ) {
-        // Label
         Text(
-            text = stringResource(R.string.seconds_label),
+            text = stringResource(R.string.seconds_lamp_label),
             style = MaterialTheme.typography.labelSmall,
             color = Color.White.copy(alpha = 0.6f),
         )
 
         Spacer(modifier = Modifier.height(Dimensions.SecondLampSpacer))
 
-        // Circular lamp
         Box(
             modifier =
-                modifier
+                Modifier
                     .size(Dimensions.SecondLampSize)
                     .clip(CircleShape)
                     .background(
-                        if (lampState == LampState.YELLOW) {
-                            BerlinYellow
+                        if (lampState == LampState.ON) {
+                            MaterialTheme.colorScheme.primary // Yellow from theme
                         } else {
-                            LampOff
+                            MaterialTheme.colorScheme.tertiary // LampOff from theme
                         },
                     )
                     .semantics {
                         contentDescription =
-                            if (lampState == LampState.YELLOW) {
+                            if (lampState == LampState.ON) {
                                 lampOnDescription
                             } else {
                                 lampOffDescription
@@ -75,18 +73,18 @@ fun SecondsLamp(
 }
 
 /**
- * Preview of seconds lamp in ON state (yellow).
+ * Preview of seconds lamp ON.
  */
 @Preview(showBackground = true, backgroundColor = 0xFF121212)
 @Composable
 private fun SecondsLampOnPreview() {
     BerlinClockTheme {
-        SecondsLamp(lampState = LampState.YELLOW)
+        SecondsLamp(lampState = LampState.ON)
     }
 }
 
 /**
- * Preview of seconds lamp in OFF state.
+ * Preview of seconds lamp OFF.
  */
 @Preview(showBackground = true, backgroundColor = 0xFF121212)
 @Composable

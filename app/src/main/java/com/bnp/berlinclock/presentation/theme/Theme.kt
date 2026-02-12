@@ -5,26 +5,24 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
 
 /**
- * Dark color scheme for Berlin Clock.
+ * Berlin Clock color scheme.
  *
  */
-private val DarkColorScheme =
+private val BerlinColorScheme =
     darkColorScheme(
         primary = BerlinYellow,
         secondary = BerlinRed,
+        tertiary = LampOff,
         background = Background,
-        surface = Surface,
     )
 
 /**
  * Berlin Clock Material3 theme.
- *
- * @param content The composable content to theme
  */
 @Composable
 fun BerlinClockTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = DarkColorScheme,
+        colorScheme = BerlinColorScheme,
         typography = Typography,
         content = content,
     )

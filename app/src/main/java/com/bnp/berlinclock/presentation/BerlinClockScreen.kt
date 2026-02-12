@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.bnp.berlinclock.R
 import com.bnp.berlinclock.domain.converter.BerlinClockConverter
 import com.bnp.berlinclock.domain.model.BerlinTime
+import com.bnp.berlinclock.domain.model.LampColor
 import com.bnp.berlinclock.presentation.components.LampRow
 import com.bnp.berlinclock.presentation.components.SecondsLamp
 import com.bnp.berlinclock.presentation.theme.Background
@@ -148,26 +149,32 @@ private fun BerlinClockDisplay(
         Spacer(modifier = Modifier.height(Dimensions.ScreenDisplaySpacer))
 
         // Five hours row
+        // Five hours row (RED)
         LampRow(
             lamps = berlinTime.fiveHourRow,
+            lampColor = LampColor.RED,
             label = stringResource(R.string.five_hours_label),
         )
 
-        // One hour row
+// One hour row (RED)
         LampRow(
             lamps = berlinTime.oneHourRow,
+            lampColor = LampColor.RED,
             label = stringResource(R.string.one_hour_label),
         )
 
-        // Five minutes row
+// Five minutes row (YELLOW with quarter markers)
         LampRow(
             lamps = berlinTime.fiveMinuteRow,
+            lampColor = LampColor.YELLOW,
             label = stringResource(R.string.five_minutes_label),
+            quarterPositions = setOf(2, 5, 8),
         )
 
-        // One minute row
+// One minute row (YELLOW)
         LampRow(
             lamps = berlinTime.oneMinuteRow,
+            lampColor = LampColor.YELLOW,
             label = stringResource(R.string.one_minute_label),
         )
     }
@@ -350,5 +357,6 @@ private fun createPreviewState(
     return BerlinClockUiState(
         currentTime = LocalTime.of(hours, minutes, seconds),
         berlinTime = converter.convert(hours, minutes, seconds),
+        error = null,
     )
 }
